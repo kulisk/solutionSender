@@ -1,5 +1,6 @@
+const problemId = 32063
+
 async function getStatementUrl() {
-    const problemId = 32063
     const statementLink = document.getElementById('statement')
     try {
         let response = await fetch(`http://localhost:5000/${problemId}`)
@@ -8,6 +9,10 @@ async function getStatementUrl() {
     } catch (e) {
         console.log(e)
     }
+}
+
+async function sendSolution() {
+    alert('send!')
 }
 
 getStatementUrl().then()

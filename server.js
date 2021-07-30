@@ -1,11 +1,23 @@
 const express = require('express')
 const fetch = require('node-fetch')
-const {param} = require("express");
+const bodyParser = require('body-parser')
+
+const submits = require('./submits')
 
 const app = express()
 
 const apiKey = 'yCGLyGCu3ku06igcN7JQUQ'
 const PORT = 5000
+
+const jsonParser = bodyParser.json()
+
+app.get('/submits', (req, res) => {
+    return res.status(200).send({
+        success: "true",
+        message: "Submits list",
+        submits: submits
+    })
+})
 
 app.get('/', async (req, res) => {
     const apiUrl = `https://archive.sybon.org/api/Collections/20?api_key=${apiKey}`
@@ -23,4 +35,19 @@ app.get('/:id', async (req, res) => {
     res.send(text)
 })
 
-app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
+app.post('/', jsonParser, async (req, res) => {
+    const submit = {
+        id: submits.length + 1,
+        language: req.body.language,
+        taskId: req.body.taskId,
+        solution: req.body.solution
+    };
+    submits.push(submit);
+    return res.status(201).send({
+        success: "true",
+        message: "submit added successfully",
+        submit,
+    });
+})
+
+app.listen(PORT, () => console.log(`App listening on http://localhost:${PORT}`));
