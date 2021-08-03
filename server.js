@@ -43,20 +43,33 @@ app.get('/:id', async (req, res) => {
 })
 
 app.post('/', jsonParser, async (req, res) => {
-    const submit = {
-        id: submits.length + 1,
-        language: req.body.language,
-        taskId: req.body.taskId,
-        solution: req.body.solution
-    };
-    submits.push(submit);
+    const apiUrl = `https://checking.sybon.org/api/Submits/send?api_key=${apiKey}`
+    const buffer = new Buffer(req.body.solution)
+    const body = {
+        compilerId: req.body.compilerId,
+        solution: buffer.toString('base64'),
+        solutionFileType: "Text",
+        problemId: req.body.problemId,
+        pretestsOnly: false,
+        continueCondition: "WhileOk"
+    }
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+    }
+    const fetchResponse = await fetch(apiUrl, options)
+    const json = await fetchResponse.json()
     res.setHeader("Access-Control-Allow-Origin", "*");
     return res.status(201).send({
         success: "true",
         message: "submit added successfully",
-        submit,
+        json,
     });
 })
+
 
 try {
     app.listen(PORT, () => console.log(`App listening on http://localhost:${PORT}`));

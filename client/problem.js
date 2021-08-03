@@ -18,6 +18,7 @@ async function getStatementUrl() {
             let option = document.createElement('option')
             option.textContent = json[i].name
             option.setAttribute('value', json[i].id)
+            option.className += 'languageOption'
             if (json[i].name === 'C++') {
                 option.setAttribute('selected', 'true')
             }

@@ -1,12 +1,13 @@
 async function sendSolution() {
-    const reqBody = {
-        language: "Java",
-        taskId: "23421",
-        solution: "C++ solution"
+    const url = 'http://localhost:5000'
+    let compilers = Array.from(document.getElementsByClassName('languageOption'))
+    const body = {
+        compilerId: compilers.find((element) => element.selected).value,
+        solution: document.getElementById('solutionCode').value,
+        problemId: 32063,
     }
-    const request = 'http://localhost:5000'
     try {
-        let response = await fetch(request, {
+        let response = await fetch(url, {
             method: 'POST',
             cache: 'no-cache',
             credentials: 'same-origin',
@@ -15,9 +16,10 @@ async function sendSolution() {
             },
             redirect: 'follow',
             referrerPolicy: 'no-referrer',
-            body: JSON.stringify(reqBody)
+            body: JSON.stringify(body)
         })
-        console.log(response.status)
+        let json = await response.json()
+        console.log(json)
     } catch (e) {
         console.log(e)
     }
