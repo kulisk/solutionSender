@@ -9,6 +9,23 @@ async function getStatementUrl() {
     } catch (e) {
         console.log(e)
     }
+
+    const languages = document.getElementById('languages')
+    try {
+        let response = await fetch(`https://checking.sybon.org/api/Compilers`)
+        let json = await response.json()
+        for (let i = 0; i < json.length; i++) {
+            let option = document.createElement('option')
+            option.textContent = json[i].name
+            option.setAttribute('value', json[i].id)
+            if (json[i].name === 'C++') {
+                option.setAttribute('selected', 'true')
+            }
+            languages.appendChild(option)
+        }
+    } catch (e) {
+        console.log(e)
+    }
 }
 
 getStatementUrl().then()
