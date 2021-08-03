@@ -11,6 +11,13 @@ const PORT = 5000
 
 const jsonParser = bodyParser.json()
 
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    next();
+})
+
 app.get('/submits', (req, res) => {
     return res.status(200).send({
         success: "true",
@@ -43,6 +50,7 @@ app.post('/', jsonParser, async (req, res) => {
         solution: req.body.solution
     };
     submits.push(submit);
+    res.setHeader("Access-Control-Allow-Origin", "*");
     return res.status(201).send({
         success: "true",
         message: "submit added successfully",
@@ -50,4 +58,9 @@ app.post('/', jsonParser, async (req, res) => {
     });
 })
 
-app.listen(PORT, () => console.log(`App listening on http://localhost:${PORT}`));
+try {
+    app.listen(PORT, () => console.log(`App listening on http://localhost:${PORT}`));
+} catch (e) {
+    console.log(e)
+}
+

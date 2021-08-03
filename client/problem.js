@@ -11,8 +11,4 @@ async function getStatementUrl() {
     }
 }
 
-async function sendSolution() {
-    alert('send!')
-}
-
 getStatementUrl().then()
