@@ -29,4 +29,8 @@ async function getStatementUrl() {
     }
 }
 
+function share() {
+    document.getElementById('shareLink').textContent = window.location.href;
+}
+
 getStatementUrl().then()
