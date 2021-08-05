@@ -1,8 +1,9 @@
 const express = require('express')
 const fetch = require('node-fetch')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 
-const submits = require('./submits')
+const Submit = require('./models/Submit')
 
 const app = express()
 
@@ -22,7 +23,6 @@ app.get('/submits', (req, res) => {
     return res.status(200).send({
         success: "true",
         message: "Submits list",
-        submits: submits
     })
 })
 
@@ -62,6 +62,13 @@ app.post('/', jsonParser, async (req, res) => {
     }
     const fetchResponse = await fetch(apiUrl, options)
     const json = await fetchResponse.json()
+    const submit = new Submit({
+        compilerId: req.body.compilerId,
+        solution: buffer.toString('base64'),
+        problemId: req.body.problemId,
+        submitId: json
+    })
+    await submit.save()
     res.setHeader("Access-Control-Allow-Origin", "*");
     return res.status(201).send({
         success: "true",
@@ -70,10 +77,17 @@ app.post('/', jsonParser, async (req, res) => {
     });
 })
 
-
-try {
-    app.listen(PORT, () => console.log(`App listening on http://localhost:${PORT}`));
-} catch (e) {
-    console.log(e)
+async function start() {
+    try {
+        await mongoose.connect("mongodb+srv://dbUser:yikUgRPF4IHF2eYc@cluster0.jbv31.mongodb.net/sumbits?retryWrites=true&w=majority", {
+            useNewUrlParser: true,
+            useFindAndModify: false,
+            useUnifiedTopology: true
+        })
+        app.listen(PORT, () => console.log(`App listening on http://localhost:${PORT}`));
+    } catch (e) {
+        console.log(e)
+    }
 }
 
+start()
