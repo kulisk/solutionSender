@@ -30,7 +30,39 @@ async function getStatementUrl() {
 }
 
 function share() {
-    document.getElementById('shareLink').textContent = window.location.href;
+    let textArea = document.createElement("textarea");
+    textArea.style.position = 'fixed';
+    textArea.style.top = '0';
+    textArea.style.left = '0';
+    textArea.style.width = '2em';
+    textArea.style.height = '2em';
+    textArea.style.padding = '0';
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+    textArea.style.background = 'transparent';
+    textArea.value = window.location.href;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    let alert = document.createElement('div')
+    alert.classList.add('alert', 'alert-success')
+    alert.textContent = 'Copied'
+    alert.style.position = 'fixed'
+    alert.style.top = '0'
+    alert.style.right = '0'
+
+    try {
+        document.execCommand('copy');
+        document.body.insertBefore(alert, document.body.firstChild)
+        setTimeout(() => {
+            document.body.removeChild(alert)
+        }, 1000)
+    } catch (err) {
+        console.log('Unable to copy');
+    }
+    document.body.removeChild(textArea);
 }
 
 getStatementUrl().then()
