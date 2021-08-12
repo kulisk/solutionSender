@@ -10,6 +10,9 @@ const schema = new Schema({
     problemId: {
         type: Number,
     },
+    problemName: {
+      type: String,
+    },
     submitId: {
         type: Number,
     }

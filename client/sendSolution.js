@@ -5,6 +5,7 @@ async function sendSolution() {
         compilerId: compilers.find((element) => element.selected).value,
         solution: document.getElementById('solutionCode').value,
         problemId: 32063,
+        problemName: "A + B"
     }
     try {
         let response = await fetch(url, {
@@ -19,7 +20,6 @@ async function sendSolution() {
             body: JSON.stringify(body)
         })
         let json = await response.json()
-        console.log(json)
     } catch (e) {
         console.log(e)
     }

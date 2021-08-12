@@ -19,10 +19,19 @@ app.use(function (req, res, next) {
     next();
 })
 
-app.get('/submits', (req, res) => {
+app.get('/submits', async (req, res) => {
+    const submits = await Submit.find();
+    const results = [];
+    for (let i = 0; i < submits.length; i++) {
+        const apiUrl = `https://checking.sybon.org/api/Submits/results?ids=${submits[i].submitId}&api_key=${apiKey}`
+        const fetchResponse = await fetch(apiUrl)
+        const json = await fetchResponse.json()
+        results.push({problemName: submits[i].problemName, status: json[0].buildResult.status})
+    }
     return res.status(200).send({
         success: "true",
         message: "Submits list",
+        results
     })
 })
 
@@ -66,6 +75,7 @@ app.post('/', jsonParser, async (req, res) => {
         compilerId: req.body.compilerId,
         solution: buffer.toString('base64'),
         problemId: req.body.problemId,
+        problemName: req.body.problemName,
         submitId: json
     })
     await submit.save()
