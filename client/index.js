@@ -13,7 +13,7 @@ async function sendRequest() {
         let br = document.createElement('br')
         problems.forEach(item => {
             let link = document.createElement('a');
-            link.setAttribute('href', `./problem?id=${item.id}`)
+            link.setAttribute('href', `./problem.html`)
             link.setAttribute('class', 'problemLink')
             link.textContent = item.name
             div.appendChild(link)
